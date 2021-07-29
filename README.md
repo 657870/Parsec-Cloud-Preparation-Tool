@@ -16,16 +16,16 @@
                                  *#############///                 
                                      ##########///                 
                                         ######(*                   
-                                                           
-                           
-                                       
+
+
+
                     ~Parsec Self Hosted Cloud Setup Script~
 
 
 ### Parsec Cloud Preparation Tool
 This script sets up your cloud computer with a bunch of settings and drivers
 to make your life easier.  
-                    
+
 It's provided with no warranty, so use it at your own risk.
 
 ### Who this script is for:
@@ -44,20 +44,21 @@ Do not select "Turn on Display Device" when setting up the instance, this will c
 
 ### START HERE! Copy this code into Powershell (you may need to press enter at the end):
 ```
-[Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls" 
-$ScriptWebArchive = "https://github.com/parsec-cloud/Parsec-Cloud-Preparation-Tool/archive/master.zip"  
+[Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
+$ScriptWebArchive = "https://github.com/657870/Parsec-Cloud-Preparation-Tool/archive/feature/windows10-support.zip"  
 $LocalArchivePath = "$ENV:UserProfile\Downloads\Parsec-Cloud-Preparation-Tool"  
 (New-Object System.Net.WebClient).DownloadFile($ScriptWebArchive, "$LocalArchivePath.zip")  
 Expand-Archive "$LocalArchivePath.zip" -DestinationPath $LocalArchivePath -Force  
-CD $LocalArchivePath\Parsec-Cloud-Preparation-Tool-master\ | powershell.exe .\Loader.ps1  
+CD $LocalArchivePath\Parsec-Cloud-Preparation-Tool-feature-windows10-support\ | powershell.exe .\Loader.ps1  
 ```
 
 This tool supports:
 
 ### OS:
 Server 2016  
-Server 2019
-                    
+Server 2019  
+Windows 10
+
 ### CLOUD SKU:
 AWS g3.4xLarge    (Tesla M60)  
 AWS g2.2xLarge    (GRID K520)  
@@ -106,7 +107,7 @@ A. That's on you to test the script and describe the errors you see, do not crea
 
 Q. How do I change my wallpaper?  
 A. Delete the Wallpaper registry value from HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System  
-  
+
 Q. I created an Amazon AMI using this script but when I create a machine from the AMI I can't select high display resolutions above 1366x768  
 A. You didn't create the AMI correctly. You should search for "Run Sysprep with EC2Launch" on [this page](https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/Creating_EBSbacked_WinAMI.html).  It's important when using the tool, you select"
 Shutdown with sysprep". When the instance has shutdown/stopped after running the AWS tool, then you can create the image. If you must turn on the instance again, you should run the sysprep tool again and shutdown.  
@@ -118,4 +119,3 @@ A. There is another screen on the cloud machine that Parsec can't capture, that 
 2. Press CTRL + Shift + i (this will enter into immersive mode)
 3. Press Windows Key + P
 4. Press Down Arrow, Down Arrow, Enter.
-
