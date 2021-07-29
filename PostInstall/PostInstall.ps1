@@ -441,8 +441,14 @@ function create-directories {
 #disable IE security
 function disable-iesecurity {
     ProgressWriter -Status "Disabling Internet Explorer security to enable web browsing" -PercentComplete $PercentComplete
-    Set-Itemproperty "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}" -name IsInstalled -value 0 -force | Out-Null
-    Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}" -Name IsInstalled -Value 0 -Force | Out-Null
+    $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+    $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
+    if((Test-Path $AdminKey) -eq $true) {
+        Set-Itemproperty $AdminKey -name IsInstalled -value 0 -force | Out-Null
+    }
+    if((Test-Path $UserKey) -eq $true) {
+        Set-ItemProperty $UserKey -Name IsInstalled -Value 0 -Force | Out-Null
+    }
     Stop-Process -Name Explorer -Force
     }
 
@@ -470,9 +476,11 @@ function install-windows-features {
     Start-Process -FilePath "C:\ParsecTemp\Apps\directx_jun2010_redist.exe" -ArgumentList '/T:C:\ParsecTemp\DirectX /Q'-wait
     Start-Process -FilePath "C:\ParsecTemp\DirectX\DXSETUP.EXE" -ArgumentList '/silent' -wait
     ProgressWriter -Status "Installing Direct Play" -PercentComplete $PercentComplete
-    Install-WindowsFeature Direct-Play | Out-Null
-    ProgressWriter -Status "Installing .net 3.5" -PercentComplete $PercentComplete
-    Install-WindowsFeature Net-Framework-Core | Out-Null
+    if ((gwmi win32_operatingsystem | % caption) -notlike '*Windows 10*') {
+        Install-WindowsFeature Direct-Play | Out-Null
+        ProgressWriter -Status "Installing .net 3.5" -PercentComplete $PercentComplete
+        Install-WindowsFeature Net-Framework-Core | Out-Null
+    }
     ProgressWriter -Status "Cleaning up" -PercentComplete $PercentComplete
     Remove-Item -Path C:\ParsecTemp\DirectX -force -Recurse 
     }
@@ -657,7 +665,9 @@ function Create-One-Hour-Warning-Shortcut{
 #Disables Server Manager opening on Startup
 function disable-server-manager {
     ProgressWriter -Status "Disabling Windows Server Manager from starting at startup" -PercentComplete $PercentComplete
-    Get-ScheduledTask -TaskName ServerManager | Disable-ScheduledTask | Out-Null
+    if ((gwmi win32_operatingsystem | % caption) -notlike '*Windows 10*') {
+        Get-ScheduledTask -TaskName ServerManager | Disable-ScheduledTask | Out-Null
+    }
     }
 
 #AWS Clean up Desktop Items
