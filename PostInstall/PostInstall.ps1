@@ -895,8 +895,10 @@ Write-Host -foregroundcolor red "
                     Google P4  VW    (Tesla P4 Virtual Workstation)
                     Google T4  VW    (Tesla T4 Virtual Workstation)
 
-"   
-#PromptUserAutoLogon -DontPromptPasswordUpdateGPU:$DontPromptPasswordUpdateGPU
+"
+if ((gwmi win32_operatingsystem | % caption) -notlike '*Windows 10*') {
+    PromptUserAutoLogon -DontPromptPasswordUpdateGPU:$DontPromptPasswordUpdateGPU
+}
 $ScripttaskList = @(
 "setupEnvironment";
 "addRegItems";
