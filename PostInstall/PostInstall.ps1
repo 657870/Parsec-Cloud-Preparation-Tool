@@ -927,7 +927,7 @@ foreach ($func in $ScripttaskList) {
     & $func $PercentComplete
     }
 
-#StartGPUUpdate -DontPromptPasswordUpdateGPU:$DontPromptPasswordUpdateGPU
+StartGPUUpdate -DontPromptPasswordUpdateGPU:$DontPromptPasswordUpdateGPU
 ProgressWriter -status "Done" -percentcomplete 100
 Write-Host "1. Open Parsec and sign in" -ForegroundColor black -BackgroundColor Green 
 Write-Host "2. Use GPU Updater to update your GPU Drivers!" -ForegroundColor black -BackgroundColor Green 
