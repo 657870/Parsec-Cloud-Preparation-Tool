@@ -896,7 +896,7 @@ Write-Host -foregroundcolor red "
                     Google T4  VW    (Tesla T4 Virtual Workstation)
 
 "
-if ((gwmi win32_operatingsystem | % caption) -notlike '*Windows 10*') {
+if ((gwmi win32_operatingsystem | % caption) -like '*Windows 10*') {
     PromptUserAutoLogon -DontPromptPasswordUpdateGPU:$DontPromptPasswordUpdateGPU
 }
 $ScripttaskList = @(
